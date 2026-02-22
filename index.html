@@ -926,7 +926,8 @@ php artisan boost:install</div></code></pre><button class="md:block hidden copyB
 <!-- Payload is stored here so any <html> in the text doesn't break your page -->
 <textarea id="kurtEggPayload" hidden>
 Zero-Bloat Laravel Perpustakaan
-Absolute minimum. Only what the PDF explicitly requires. No validation, no flash messages, no eager loading, no --resource, no name(). Just login, CRUD, borrow, return. Done.[1]
+Absolute minimum. Only what the PDF explicitly requires. No validation, no flash messages, no eager loading, 
+no --resource, no name(). Just login, CRUD, borrow, return. Done.[1]
 
 Step 1: Setup
 composer create-project laravel/laravel perpustakaan
@@ -1121,7 +1122,8 @@ return redirect('/login');
 public function logout() { Auth::logout(); return redirect('/login'); }
 }
 
-PDF says: login → wrong password = error + stay on login, correct = go to dashboard. Register = siswa fills nis/nama/kelas/jurusan/username/password → done. That's all this does.[1]
+PDF says: login → wrong password = error + stay on login, correct = go to dashboard. 
+Register = siswa fills nis/nama/kelas/jurusan/username/password → done. That's all this does.[1]
 
 
 app/Http/Controllers/AdminController.php
@@ -1138,20 +1140,21 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-// --- BUKU ---
 public function books() { return view('admin.books', ['books' => Book::all()]); }
 public function createBook() { return view('admin.book-form'); }
-public function storeBook(Request $request) { Book::create($request->all()); return redirect('/admin/books'); }
+public function storeBook(Request $request) { Book::create($request->all()); 
+return redirect('/admin/books'); }
 public function editBook(Book $book) { return view('admin.book-form', ['book' => $book]); }
-public function updateBook(Request $request, Book $book) { $book->update($request->all()); return redirect('/admin/books'); }
+public function updateBook(Request $request, Book $book) { $book->update($request->all()); 
+return redirect('/admin/books'); }
 public function deleteBook(Book $book) { $book->delete(); return redirect('/admin/books'); }
 
-// --- ANGGOTA ---
-public function members() { return view('admin.members', ['members' => User::where('role','siswa')->get()]); }
+public function members() { return view('admin.members', 
+['members' => User::where('role','siswa')->get()]); }
 public function deleteMember(User $user) { $user->delete(); return redirect('/admin/members'); }
 
-// --- TRANSAKSI ---
-public function transactions() { return view('admin.transactions', ['transactions' => Transaction::with(['user','book'])->get()]); }
+public function transactions() { return view('admin.transactions', ['transactions' => 
+Transaction::with(['user','book'])->get()]); }
 }
 
 
@@ -1168,7 +1171,8 @@ use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
-public function borrow() { return view('siswa.borrow', ['books' => Book::where('status','available')->get()]); }
+public function borrow() { return view('siswa.borrow', 
+['books' => Book::where('status','available')->get()]); }
 
 public function borrowStore(Request $request)
 {
@@ -1181,7 +1185,8 @@ return redirect('/siswa/borrow');
 public function returnList()
 {
 return view('siswa.return', [
-'transactions' => Transaction::where('user_id', auth()->id())->whereNull('tanggal_kembali')->with('book')->get()
+'transactions' => Transaction::where('user_id', auth()->id())->
+whereNull('tanggal_kembali')->with('book')->get()
 ]);
 }
 
@@ -1269,7 +1274,8 @@ layout.blade.php
 <a href="/siswa/borrow" class="btn btn-sm btn-outline-light">Pinjam</a>
 <a href="/siswa/return" class="btn btn-sm btn-outline-light">Kembalikan</a>
 @endif
-<form action="/logout" method="POST" class="d-inline">@csrf<button class="btn btn-sm btn-danger">Logout</button></form>
+<form action="/logout" method="POST" class="d-inline">@csrf<button class="btn btn-sm btn-danger">
+Logout</button></form>
 </div>
 @endauth
 </nav>
@@ -1323,10 +1329,12 @@ admin/books.blade.php
 <tr><th>Kode</th><th>Judul</th><th>Pengarang</th><th>Penerbit</th><th>Tahun</th><th>Aksi</th></tr>
 @foreach($books as $b)
 <tr>
-<td>{{$b->kode_buku}}</td><td>{{$b->judul_buku}}</td><td>{{$b->pengarang}}</td><td>{{$b->penerbit}}</td><td>{{$b->tahun}}</td>
+<td>{{$b->kode_buku}}</td><td>{{$b->judul_buku}}</td><td>{{$b->pengarang}}</td><td>{{$b->penerbit}}
+</td><td>{{$b->tahun}}</td>
 <td>
 <a href="/admin/books/{{$b->id}}/edit" class="btn btn-sm btn-warning">Edit</a>
-<form action="/admin/books/{{$b->id}}" method="POST" class="d-inline">@csrf @method('DELETE')<button class="btn btn-sm btn-danger">Hapus</button></form>
+<form action="/admin/books/{{$b->id}}" method="POST" class="d-inline">@csrf @method('DELETE')
+<button class="btn btn-sm btn-danger">Hapus</button></form>
 </td>
 </tr>
 @endforeach
@@ -1342,11 +1350,16 @@ admin/book-form.blade.php
 <form method="POST" action="{{ isset($book) ? '/admin/books/'.$book->id : '/admin/books' }}">
 @csrf
 @if(isset($book)) @method('PUT') @endif
-<input name="kode_buku" class="form-control mb-2" placeholder="Kode Buku" value="{{ $book->kode_buku ?? '' }}">
-<input name="judul_buku" class="form-control mb-2" placeholder="Judul Buku" value="{{ $book->judul_buku ?? '' }}">
-<input name="pengarang" class="form-control mb-2" placeholder="Pengarang" value="{{ $book->pengarang ?? '' }}">
-<input name="penerbit" class="form-control mb-2" placeholder="Penerbit" value="{{ $book->penerbit ?? '' }}">
-<input name="tahun" class="form-control mb-2" placeholder="Tahun" value="{{ $book->tahun ?? '' }}">
+<input name="kode_buku" class="form-control mb-2" 
+placeholder="Kode Buku" value="{{ $book->kode_buku ?? '' }}">
+<input name="judul_buku" class="form-control mb-2" 
+placeholder="Judul Buku" value="{{ $book->judul_buku ?? '' }}">
+<input name="pengarang" class="form-control mb-2" 
+placeholder="Pengarang" value="{{ $book->pengarang ?? '' }}">
+<input name="penerbit" class="form-control mb-2" 
+placeholder="Penerbit" value="{{ $book->penerbit ?? '' }}">
+<input name="tahun" class="form-control mb-2" 
+placeholder="Tahun" value="{{ $book->tahun ?? '' }}">
 <button class="btn btn-primary">Simpan</button>
 </form>
 @endsection
@@ -1361,8 +1374,10 @@ admin/members.blade.php
 <tr><th>ID</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Jurusan</th><th>Email</th><th>Aksi</th></tr>
 @foreach($members as $m)
 <tr>
-<td>{{$m->id}}</td><td>{{$m->nis}}</td><td>{{$m->name}}</td><td>{{$m->kelas}}</td><td>{{$m->jurusan}}</td><td>{{$m->email}}</td>
-<td><form action="/admin/members/{{$m->id}}" method="POST" class="d-inline">@csrf @method('DELETE')<button class="btn btn-sm btn-danger">Hapus</button></form></td>
+<td>{{$m->id}}</td><td>{{$m->nis}}</td><td>{{$m->name}}</td><td>{{$m->kelas}}
+</td><td>{{$m->jurusan}}</td><td>{{$m->email}}</td>
+<td><form action="/admin/members/{{$m->id}}" method="POST" class="d-inline">
+@csrf @method('DELETE')<button class="btn btn-sm btn-danger">Hapus</button></form></td>
 </tr>
 @endforeach
 </table>
@@ -1375,10 +1390,12 @@ admin/transactions.blade.php
 @section('content')
 <h2>Transaksi</h2>
 <table class="table">
-<tr><th>ID</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Jurusan</th><th>Tanggal Pinjam</th><th>Tanggal Kembali</th></tr>
+<tr><th>ID</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Jurusan</th><th>
+Tanggal Pinjam</th><th>Tanggal Kembali</th></tr>
 @foreach($transactions as $t)
 <tr>
-<td>{{$t->id}}</td><td>{{$t->user->nis}}</td><td>{{$t->user->name}}</td><td>{{$t->user->kelas}}</td><td>{{$t->user->jurusan}}</td>
+<td>{{$t->id}}</td><td>{{$t->user->nis}}</td><td>{{$t->user->name}}
+</td><td>{{$t->user->kelas}}</td><td>{{$t->user->jurusan}}</td>
 <td>{{$t->tanggal_pinjam}}</td><td>{{$t->tanggal_kembali ?? '-'}}</td>
 </tr>
 @endforeach
@@ -1396,7 +1413,8 @@ siswa/borrow.blade.php
 @foreach($books as $b)
 <tr>
 <td>{{$b->kode_buku}}</td><td>{{$b->judul_buku}}</td><td>{{$b->pengarang}}</td>
-<td><form action="/siswa/borrow" method="POST">@csrf<input type="hidden" name="book_id" value="{{$b->id}}"><button class="btn btn-sm btn-success">Pinjam</button></form></td>
+<td><form action="/siswa/borrow" method="POST">@csrf<input type="hidden" name="book_id" 
+value="{{$b->id}}"><button class="btn btn-sm btn-success">Pinjam</button></form></td>
 </tr>
 @endforeach
 </table>
@@ -1413,7 +1431,8 @@ siswa/return.blade.php
 @foreach($transactions as $t)
 <tr>
 <td>{{$t->book->judul_buku}}</td><td>{{$t->tanggal_pinjam}}</td>
-<td><form action="/siswa/return" method="POST">@csrf<input type="hidden" name="transaction_id" value="{{$t->id}}"><button class="btn btn-sm btn-warning">Kembalikan</button></form></td>
+<td><form action="/siswa/return" method="POST">@csrf<input type="hidden" name="transaction_id" 
+value="{{$t->id}}"><button class="btn btn-sm btn-warning">Kembalikan</button></form></td>
 </tr>
 @endforeach
 </table>
@@ -1425,7 +1444,8 @@ php artisan serve
 
 Create admin via Tinker:
 php artisan tinker
-\App\Models\User::create(['name'=>'Admin','email'=>'admin@admin.com','password'=>bcrypt('password'),'role'=>'admin']);
+\App\Models\User::create(['name'=>'Admin','email'=>'admin@admin.com',
+'password'=>bcrypt('password'),'role'=>'admin']);
 
 
 All Commands
