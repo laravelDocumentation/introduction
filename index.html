@@ -1371,18 +1371,40 @@ admin/members.blade.php
 @extends('layout')
 @section('content')
 <h2>Kelola Anggota</h2>
+
 <table class="table">
-<tr><th>ID</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Jurusan</th><th>Email</th><th>Aksi</th></tr>
+<tr>
+  <th>ID</th>
+  <th>NIS</th>
+  <th>Nama</th>
+  <th>Kelas</th>
+  <th>Jurusan</th>
+  <th>Email</th>
+  <th>Password (hash)</th>
+  <th>Aksi</th>
+</tr>
+
 @foreach($members as $m)
 <tr>
-<td>{{$m->id}}</td><td>{{$m->nis}}</td><td>{{$m->name}}</td><td>{{$m->kelas}}
-</td><td>{{$m->jurusan}}</td><td>{{$m->email}}</td>
-<td><form action="/admin/members/{{$m->id}}" method="POST" class="d-inline">
-@csrf @method('DELETE')<button class="btn btn-sm btn-danger">Hapus</button></form></td>
+  <td>{{$m->id}}</td>
+  <td>{{$m->nis}}</td>
+  <td>{{$m->name}}</td>
+  <td>{{$m->kelas}}</td>
+  <td>{{$m->jurusan}}</td>
+  <td>{{$m->email}}</td>
+  <td>{{$m->password}}</td>
+  <td>
+    <form action="/admin/members/{{$m->id}}" method="POST" class="d-inline">
+      @csrf
+      @method('DELETE')
+      <button class="btn btn-sm btn-danger">Hapus</button>
+    </form>
+  </td>
 </tr>
 @endforeach
 </table>
 @endsection
+
 
 
 admin/transactions.blade.php
